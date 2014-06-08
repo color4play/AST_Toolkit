@@ -1,0 +1,16 @@
+# 中间人劫持
+
+> *斜体*代表需要修改参数
+
+## 代理网关劫持流量
+
+> sudo iptables -t nat -A POSTROUTING -o *eth0* -j SNAT --to *代理网关ip*
+
+> sudo iptables -t nat -A PREROUTING -d *dst\_ip* -p tcp --dport *dst\_port* -j DNAT --to *fakeip:port*
+
+
+## Android本地劫持流量
+
+> iptables -t nat -A OUTPUT -p tcp --dport *dst\_port* -j DNAT --to *PROXY\_IP:PROXY\_PORT*
+
+> FIXME信息忽略即可

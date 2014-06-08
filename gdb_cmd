@@ -1,0 +1,5 @@
+> set solib-search-path *path/to/app/libs*;*path/to/app_process&linker*;*path/to/ndk*/platforms/android-*sdk\_level*/arch-arm/usr/lib
+
+> target remote *:debug\_port*
+
+> handle SIG32 nostop noprint
