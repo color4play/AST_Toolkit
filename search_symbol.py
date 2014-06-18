@@ -9,17 +9,17 @@
 import os
 import subprocess
 
-def nm(top_dirpath, symbol):
+def execute(cmd_pattern, top_dirpath, symbol):
     stuff = {}
     for dirpath, dirnames, filenames in os.walk(top_dirpath):
         for filename in filenames:
             filepath = os.path.join(dirpath, filename)
-            cmd = "nm -D %s | grep %s" % (
+            cmd = cmd_pattern % (
                     filepath,
-                    symbol) 
+                    symbol)
             p = subprocess.Popen(
                     cmd,
-                    stdout=subprocess.PIPE, 
+                    stdout=subprocess.PIPE,
                     shell=True)
             p.wait()
             if p.returncode == 0:
@@ -43,25 +43,32 @@ def classify(stuff):
 
     return result
 
-def main(top_dirpath, symbol):
-    stuff = nm(top_dirpath, symbol)
-    result = classify(stuff)
+def main(op, top_dirpath, symbol):
+    if op == 'nm':
+        stuff = execute("nm -D %s | grep %s", top_dirpath, symbol)
+        result = classify(stuff)
 
-    print 'EXPORT LIB(s):'
-    for filepath in result['export']:
-        print '\t', filepath
-    if len(result['export']) == 0:
-        print '\t', 'there is no export found'
-    print 'IMPORT LIB(s):'
-    for filepath in result['import']:
-        print '\t', filepath
-    if len(result['import']) == 0:
-        print '\t', 'there is no import found'
+        print 'EXPORT LIB(s):'
+        for filepath in result['export']:
+            print '\t', filepath
+        if len(result['export']) == 0:
+            print '\t', 'there is no export found'
+        print 'IMPORT LIB(s):'
+        for filepath in result['import']:
+            print '\t', filepath
+        if len(result['import']) == 0:
+            print '\t', 'there is no import found'
+    elif op == 'strings':
+        stuff = execute('strings -a %s | grep %s', top_dirpath, symbol)
+        for filepath, result in stuff.items():
+            print filepath, result
+    else:
+        print 'not support op'
 
 
 if __name__ == '__main__':
     import sys
-    if len(sys.argv) < 3:
-        print "Usage: %s <top_dirpath> <symbol>" % sys.argv[0]
+    if len(sys.argv) < 4:
+        print "Usage: %s <nm|strings> <top_dirpath> <symbol>" % sys.argv[0]
         sys.exit(-1)
-    main(*sys.argv[1:3])
+    main(*sys.argv[1:4])
