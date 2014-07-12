@@ -25,7 +25,6 @@ def main(manifest_path):
 			f.write('/'.join((package, name)))
 			f.write('\n')
 	print 'finish'
-	
 
 if __name__ == '__main__':
 	import sys

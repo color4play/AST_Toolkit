@@ -12,8 +12,7 @@ def main(args_file):
 		for arg in f:
 			os.system('adb shell su -c "am start -n %s"' % arg)
 			os.system("pause")
-			
-	
+
 if __name__ == '__main__':
 	import sys
 	if len(sys.argv) < 2:

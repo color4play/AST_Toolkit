@@ -16,10 +16,10 @@ def nm(top_dirpath, symbol):
             filepath = os.path.join(dirpath, filename)
             cmd = "nm -D %s | grep %s" % (
                     filepath,
-                    symbol) 
+                    symbol)
             p = subprocess.Popen(
                     cmd,
-                    stdout=subprocess.PIPE, 
+                    stdout=subprocess.PIPE,
                     shell=True)
             p.wait()
             if p.returncode == 0:
